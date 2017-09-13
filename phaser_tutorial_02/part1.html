@@ -19,11 +19,13 @@
 			var stars;
 			var score = 0;
 			var scoreText;
+			var count = 0;
 
 			function preload() {
 				game.load.image('sky', 'assets/sky.png');
 				game.load.image('ground', 'assets/platform.png');
 				game.load.image('star', 'assets/star.png');
+				game.load.image('win', 'assets/win.png');
 				game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
 			}
@@ -89,6 +91,10 @@
 				star.kill();
 				score += 10;
 				scoreText.text = 'Score: '+ score;
+				count += 1;
+				if (count == 12){
+					game.add.sprite(40, 40, 'win');
+				}
 			}
 		</script>
 	</body>
