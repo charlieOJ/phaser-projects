@@ -21,25 +21,19 @@
 				game.load.image('ball', 'assets/ball.png');
 				game.load.image('paddle', 'assets/paddle.png');
         game.load.image('background', 'assets/background.png');
-
 			}
 
 			function create() {
 				game.physics.startSystem(Phaser.Physics.ARCADE);
 				game.add.sprite(0, 0, 'background');
-				platforms = game.add.group();
-				platforms.enableBody = true;
-				var ground = platforms.create(0, game.world.height - 50, 'ground');
-				ground.scale.setTo(2,2);
-				ground.body.immovable = true;
-				var ledge = platforms.create(400, 400, 'ground');
-				ledge.body.immovable = true;
-				ledge = platforms.create(-150, 250, 'ground');
-				ledge.body.immovable = true;
 
-				player = game.add.sprite(32, game.world.height - 150, 'dude');
+				paddle = game.add.group();
+				paddle.enableBody = true;
+				// player = paddle.create(10, 20, 'paddle')
+
+				player = game.add.sprite(32, game.world.height - 150, 'paddle');
 				game.physics.arcade.enable(player);
-				player.body.bounce.y = 0.2;
+				ball.body.bounce.y = 0.2;
 				player.body.gravity.y = 300;
 				player.body.collideWorldBounds = true;
 				player.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -81,15 +75,6 @@
 				}
 			}
 
-			function collectStar (player, star){
-				star.kill();
-				score += 10;
-				scoreText.text = 'Score: '+ score;
-				count += 1;
-				if (count == 12){
-					game.add.sprite(40, 40, 'win');
-				}
-			}
 		</script>
 	</body>
 </html>
