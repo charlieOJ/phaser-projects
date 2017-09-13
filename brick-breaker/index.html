@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>brick Breaker - Phaser</title>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.js"></script>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+      #gameContainer{
+        margin-left:200px;
+        margin-top: 100px;
+      }
+    </style>
+	</head>
+	<body>
+
+    <div id="gameContainer">
+
+    </div>
+
+
+    <script type="text/javascript">
+      var game = new Phaser.Game(400, 450, Phaser.AUTO, 'gameContainer', { preload: preload, create: create, update: update });
+
+      function preload() {
+        game.load.image('paddle', 'assets/paddle.png');
+      }
+
+      function create() {
+        // Set the background color to blue
+        game.stage.backgroundColor = '#3598db';
+
+        // Start the Arcade physics system (for movements and collisions)
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+
+        // Add the physics engine to all the game objetcs
+        game.world.enableBody = true;
+
+        // Create the left/right arrow keys
+        this.left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        this.right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+
+        // Add the paddle at the bottom of the screen
+        this.paddle = game.add.sprite(200, 400, 'paddle');
+        this.paddle.angle= 90
+
+        // Make sure the paddle won't move when it hits the ball
+        this.paddle.body.immovable = true;
+
+        this.paddle.body.collideWorldBounds = true;
+
+      }
+
+      function update() {
+        // Move the paddle left/right when an arrow key is pressed
+        if (this.left.isDown) this.paddle.body.velocity.x = -300;
+        else if (this.right.isDown) this.paddle.body.velocity.x = 300;
+
+        // Stop the paddle when no key is pressed
+        else this.paddle.body.velocity.x = 0;
+      }
+
+    </script>
+	</body>
+</html>
