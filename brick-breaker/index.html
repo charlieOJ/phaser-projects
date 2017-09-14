@@ -23,44 +23,92 @@
 
     <script type="text/javascript">
       var game = new Phaser.Game(400, 450, Phaser.AUTO, 'gameContainer', { preload: preload, create: create, update: update });
+			var player;
 
       function preload() {
-        game.load.image('paddle', 'assets/paddle.png');
+
+        game.load.image('paddle', 'assets/paddles.png');
+				game.load.image('brick', 'assets/brick.png');
+				game.load.image('ball', 'assets/ball.png');
+
+
       }
 
       function create() {
-        // Set the background color to blue
-        game.stage.backgroundColor = '#3598db';
-
-        // Start the Arcade physics system (for movements and collisions)
+				// Start the Arcade physics system (for movements and collisions)
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        // Add the physics engine to all the game objetcs
-        game.world.enableBody = true;
+				// Set the background color to blue
+        game.stage.backgroundColor = '#3598db';
+				game.world.enableBody = true;
+
+				this.paddle = game.add.sprite(200, 400, 'paddle');
+
+				// game.physics.enable(player, Phaser.Physics.ARCADE);
+				// Make sure the paddle won't move when it hits the ball
+				this.paddle.body.immovable = true;
+				this.paddle.body.collideWorldBounds = true;
 
         // Create the left/right arrow keys
         this.left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         this.right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 
-        // Add the paddle at the bottom of the screen
-        this.paddle = game.add.sprite(200, 400, 'paddle');
-        this.paddle.angle= 90
+				this.bricks = game.add.group();
 
-        // Make sure the paddle won't move when it hits the ball
-        this.paddle.body.immovable = true;
+				for (var i = 0; i < 5; i++) {
+	        for (var j = 0; j < 5; j++) {
+            // Create the brick at the correct position
+            var brick = game.add.sprite(55+i*60, 55+j*35, 'brick');
 
-        this.paddle.body.collideWorldBounds = true;
+            // Make sure the brick won't move when the ball hits it
+            brick.body.immovable = true;
+
+            // Add the brick to the group
+            this.bricks.add(brick);
+	        }
+		    }
+
+				this.ball = game.add.sprite(200, 300, 'ball');
+				// Give the ball some initial speed
+		    this.ball.body.velocity.x = 200;
+		    this.ball.body.velocity.y = 200;
+
+		    // Make sure the ball will bounce when hitting something
+		    this.ball.body.bounce.setTo(1);
+		    this.ball.body.collideWorldBounds = true;
+
 
       }
 
       function update() {
         // Move the paddle left/right when an arrow key is pressed
-        if (this.left.isDown) this.paddle.body.velocity.x = -300;
-        else if (this.right.isDown) this.paddle.body.velocity.x = 300;
+        if (this.left.isDown) {
+					this.paddle.body.velocity.x = -300;
+				}  else if (this.right.isDown) {
+					this.paddle.body.velocity.x = 300;
+				} else {
+					// Stop the paddle when no key is pressed
+					this.paddle.body.velocity.x = 0;
+				}
 
-        // Stop the paddle when no key is pressed
-        else this.paddle.body.velocity.x = 0;
+				// Add collisions between the paddle and the ball
+		    game.physics.arcade.collide(this.paddle, this.ball);
+
+		    // Call the 'hit' function when the ball hits a brick
+		    game.physics.arcade.collide(this.ball, this.bricks, hit, null, this);
+
+		    // Restart the game if the ball is below the paddle
+		    if (this.ball.y > this.paddle.y){
+					game.state.start(game.state.current);
+				}
       }
+
+			function hit(ball, brick) {
+		    brick.kill();
+				if(this.bricks.lenght == 10){
+					game.state.start(game.state.current);
+				}
+			}
 
     </script>
 	</body>
