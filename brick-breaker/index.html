@@ -28,6 +28,20 @@
 			var spaceKey;
 			var leftKey;
 			var rightKey;
+			var startText;
+
+			Start = function(game) {};
+			Start.prototype = {
+				create: function(){
+					startText = game.add.text(5,200, 'PRESS SPACE TO START', {fontSize: '32px', fill: '#FFF' });
+					this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+				},
+				update: function(){
+					if (this.spaceKey.isDown) {
+						game.state.start('Game');
+					}
+				}
+			};
 
 			Game = function(game) {};
 			Game.prototype = {
@@ -59,9 +73,9 @@
 	            this.bricks.add(brick);
 		        }
 			    }
-					this.ball = game.add.sprite(200, 300, 'ball');
+					this.ball = game.add.sprite(170, 300, 'ball');
 					// Give the ball some initial speed
-			    this.ball.body.velocity.x = 200;
+			    this.ball.body.velocity.x = 210;
 			    this.ball.body.velocity.y = 200;
 			    // Make sure the ball will bounce when hitting something
 			    this.ball.body.bounce.setTo(1);
@@ -73,9 +87,9 @@
       	update: function () {
 	        // Move the paddle left/right when an arrow key is pressed
 	        if (this.leftKey.isDown) {
-						this.paddle.body.velocity.x = -300;
+						this.paddle.body.velocity.x = -500;
 					}  else if (this.rightKey.isDown) {
-						this.paddle.body.velocity.x = 300;
+						this.paddle.body.velocity.x = 500;
 					} else {
 						// Stop the paddle when no key is pressed
 						this.paddle.body.velocity.x = 0;
@@ -89,7 +103,7 @@
 
 			    // Restart the game if the ball is below the paddle
 			    if (this.ball.y > this.paddle.y-8){
-						game.state.start(game.state.current);
+						game.state.start('Start');
 					}
 
 					bricks_count = this.bricks.countDead();
@@ -113,15 +127,16 @@
 				},
 				update: function(){
 					if (this.spaceKey.isDown) {
-						game.state.start('Game');
+						game.state.start('Start');
 					}
 				}
 			};
 
 			var game = new Phaser.Game(400, 450, Phaser.AUTO, 'gameContainer');
+			game.state.add('Start', Start);
 			game.state.add('Game', Game);
 			game.state.add('Restart', Restart);
-	    game.state.start('Game');
+	    game.state.start('Start');
     </script>
 	</body>
 </html>
