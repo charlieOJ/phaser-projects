@@ -1,3 +1,4 @@
+INITIAL_VEL = 400;
 Level1 = function(game) {};
 Level1.prototype = {
   preload: function () {
@@ -10,7 +11,8 @@ Level1.prototype = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     // Set the background color to blue
     game.world.enableBody = true;
-    this.paddle = game.add.sprite(200, 400, 'paddle');
+    this.paddle = game.add.sprite(250, 400, 'paddle');
+    this.paddle.anchor.set(0.5, 0.5);
     // game.physics.enable(player, Phaser.Physics.ARCADE);
     // Make sure the paddle won't move when it hits the ball
     this.paddle.body.immovable = true;
@@ -19,19 +21,20 @@ Level1.prototype = {
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
         // Create the brick at the correct position
-        var brick = game.add.sprite(55+i*75, 55+j*35, 'brick');
+        // var brick = game.add.sprite(55+i*75, 55+j*35, 'brick');
 
         // Make sure the brick won't move when the ball hits it
-        brick.body.immovable = true;
+        // brick.body.immovable = true;
 
         // Add the brick to the group
-        this.bricks.add(brick);
+        // this.bricks.add(brick);
       }
     }
     this.ball = game.add.sprite(170, 300, 'ball');
+    // this.ball.anchor.set(0.5, 0.5)
     // Give the ball some initial speed
-    this.ball.body.velocity.x = 210;
-    this.ball.body.velocity.y = 200;
+    this.ball.body.velocity.x = INITIAL_VEL;
+    this.ball.body.velocity.y = 400;
     // Make sure the ball will bounce when hitting something
     this.ball.body.bounce.setTo(1);
     this.ball.body.collideWorldBounds = true;
@@ -51,24 +54,48 @@ Level1.prototype = {
     }
 
     // Add collisions between the paddle and the ball
-    game.physics.arcade.collide(this.paddle, this.ball);
+    // game.physics.arcade.collide(this.paddle, this.ball);
 
     // Call the 'hit' function when the ball hits a brick
     game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
+    game.physics.arcade.overlap(this.ball, this.paddle, this.collideWithPaddle, null, this);
 
     // Restart the game if the ball is below the paddle
-    if (this.ball.y > this.paddle.y-8){
+    if (this.ball.y > this.paddle.y+50){
       nextLevel = "Level1";
       game.state.start('Start', true, false, nextLevel);
     }
 
     bricks_count = this.bricks.countDead();
-    if (this.bricks.length == bricks_count){
-      nextLevel = "Level2";
-      game.state.start('Restart', true, false, nextLevel);
-    }
+    // if (this.bricks.length == bricks_count){
+    //   nextLevel = "Level2";
+    //   game.state.start('Restart', true, false, nextLevel);
+    // }
   },
   hit: function(ball, brick) {
     brick.kill();
+  },
+  collideWithPaddle: function (ball, paddle) {
+    var returnAngle;
+    // debugger
+    var segmentHit = Math.floor((ball.x - paddle.x)/4);
+
+    if (segmentHit >= 4) {
+      segmentHit = 4 - 1;
+      // alert("segmentHit sup à 4");
+      debugger
+
+    } else if (segmentHit <= -4) {
+      segmentHit = -(4 - 1);
+    }
+    console.log('segmentHit' +segmentHit);
+    returnAngle = (segmentHit * 15);
+    // if (returnAngle > 180) {
+    //   returnAngle -= 360;
+    //   alert('coucou')
+    // }
+    console.log('returnAngle' +returnAngle);
+
+    game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
   }
 };
