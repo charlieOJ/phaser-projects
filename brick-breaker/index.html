@@ -2,141 +2,31 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>brick Breaker - Phaser</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css">
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.js"></script>
-    <style type="text/css">
-      body {
-        margin: 0;
-      }
-      #gameContainer{
-        margin-left:200px;
-        margin-top: 100px;
-      }
-    </style>
+		<script type="text/javascript" src="js/StartState.js"></script>
+		<script type="text/javascript" src="js/Level1State.js"></script>
+		<script type="text/javascript" src="js/Level2State.js"></script>
+		<script type="text/javascript" src="js/RestartState.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
 	</head>
 	<body>
-
-    <div id="gameContainer">
-
-    </div>
-
-
-    <script type="text/javascript">
-			var player;
-			var bricks_count = 0;
-			var cursors;
-			var spaceKey;
-			var leftKey;
-			var rightKey;
-			var startText;
-
-			Start = function(game) {};
-			Start.prototype = {
-				create: function(){
-					startText = game.add.text(5,200, 'PRESS SPACE TO START', {fontSize: '32px', fill: '#FFF' });
-					this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-				},
-				update: function(){
-					if (this.spaceKey.isDown) {
-						game.state.start('Game');
-					}
-				}
-			};
-
-			Game = function(game) {};
-			Game.prototype = {
-				preload: function () {
-	        game.load.image('paddle', 'assets/paddles.png');
-					game.load.image('brick', 'assets/brick.png');
-					game.load.image('ball', 'assets/ball.png');
-      	},
-      	create: function () {
-					// Start the Arcade physics system (for movements and collisions)
-	        game.physics.startSystem(Phaser.Physics.ARCADE);
-					// Set the background color to blue
-					game.world.enableBody = true;
-					this.paddle = game.add.sprite(200, 400, 'paddle');
-					// game.physics.enable(player, Phaser.Physics.ARCADE);
-					// Make sure the paddle won't move when it hits the ball
-					this.paddle.body.immovable = true;
-					this.paddle.body.collideWorldBounds = true;
-					this.bricks = game.add.group();
-					for (var i = 0; i < 5; i++) {
-		        for (var j = 0; j < 5; j++) {
-	            // Create the brick at the correct position
-	            var brick = game.add.sprite(55+i*60, 55+j*35, 'brick');
-
-	            // Make sure the brick won't move when the ball hits it
-	            brick.body.immovable = true;
-
-	            // Add the brick to the group
-	            this.bricks.add(brick);
-		        }
-			    }
-					this.ball = game.add.sprite(170, 300, 'ball');
-					// Give the ball some initial speed
-			    this.ball.body.velocity.x = 210;
-			    this.ball.body.velocity.y = 200;
-			    // Make sure the ball will bounce when hitting something
-			    this.ball.body.bounce.setTo(1);
-			    this.ball.body.collideWorldBounds = true;
-					//  Register the keys.
-					this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-					this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-				},
-      	update: function () {
-	        // Move the paddle left/right when an arrow key is pressed
-	        if (this.leftKey.isDown) {
-						this.paddle.body.velocity.x = -500;
-					}  else if (this.rightKey.isDown) {
-						this.paddle.body.velocity.x = 500;
-					} else {
-						// Stop the paddle when no key is pressed
-						this.paddle.body.velocity.x = 0;
-					}
-
-					// Add collisions between the paddle and the ball
-			    game.physics.arcade.collide(this.paddle, this.ball);
-
-			    // Call the 'hit' function when the ball hits a brick
-			    game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
-
-			    // Restart the game if the ball is below the paddle
-			    if (this.ball.y > this.paddle.y-8){
-						game.state.start('Start');
-					}
-
-					bricks_count = this.bricks.countDead();
-					if (this.bricks.length == bricks_count){
-						game.state.start('Restart');
-					}
-	      },
-				hit: function(ball, brick) {
-			    brick.kill();
-				}
-			};
-
-			Restart = function(game) {};
-			Restart.prototype = {
-				preload: function(){
-					game.load.image('win', 'assets/win.png');
-				},
-				create: function(){
-					game.add.sprite(-20, 60, 'win');
-					this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-				},
-				update: function(){
-					if (this.spaceKey.isDown) {
-						game.state.start('Start');
-					}
-				}
-			};
-
-			var game = new Phaser.Game(400, 450, Phaser.AUTO, 'gameContainer');
-			game.state.add('Start', Start);
-			game.state.add('Game', Game);
-			game.state.add('Restart', Restart);
-	    game.state.start('Start');
-    </script>
+		<div class="container">
+			<div class="row justify-content-md-center">
+				<div class="col-md-12">
+					<h1 class="text-center">Brick Breaker</h1>
+					<p></p>
+				</div>
+			</div>
+			<div class="row justify-content-md-center">
+				<div class="col-md-6">
+					<div id="gameContainer">
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
