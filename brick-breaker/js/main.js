@@ -12,6 +12,7 @@ var game = new Phaser.Game(450, 500, Phaser.AUTO, 'gameContainer');
 game.state.add('Start', Start);
 game.state.add('Level1', Level1);
 game.state.add('Level2', Level2);
+game.state.add('Level3', Level3);
 game.state.add('Restart', Restart);
 
 game.state.start('Start');

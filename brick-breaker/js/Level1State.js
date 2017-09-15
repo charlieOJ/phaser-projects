@@ -63,7 +63,7 @@ Level1.prototype = {
     }
 
     bricks_count = this.bricks.countDead();
-    if (this.bricks.length == bricks_count){
+    if (this.bricks.length == bricks_count+24){
       nextLevel = "Level2";
       game.state.start('Restart', true, false, nextLevel);
     }
