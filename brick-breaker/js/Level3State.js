@@ -20,17 +20,10 @@ Level3.prototype = {
     for (var i = 0; i < 6; i++) {
       for (var j = 0; j < 6; j++) {
         // Create the brick at the correct position
-        var brick = game.add.sprite(55+i*60, 55+j*35, 'brick');
-
-        // Make sure the brick won't move when the ball hits it
-        brick.body.immovable = true;
-        var rnd = Math.random()*(10 - 0);
-        if(rnd%2 > 0 && rnd%2 < 1){
-          brick['health'] -= 0.5;
-        }
+        // var brick = game.add.sprite(55+i*60, 55+j*35, 'brick');
 
         // Add the brick to the group
-        this.bricks.add(brick);
+        this.bricks.add(this.colorBrick(i,j));
       }
     }
     this.ball = game.add.sprite(170, 300, 'ball');
@@ -78,5 +71,25 @@ Level3.prototype = {
     if (brick['health'] == 0){
       brick.kill();
     }
+  },
+  colorBrick: function(i, j){
+    var bmd = game.add.bitmapData(25, 10);
+    bmd.ctx.beginPath();
+    bmd.ctx.rect(0, 0, 25, 10);
+    var rnd = Math.random()*(10);
+    if(rnd%2 > 0 && rnd%2 < 1){
+      bmd.ctx.fillStyle = 'red';
+      bmd.ctx.fill();
+      var brick = game.add.sprite(55 + i * 60, 55 + j * 35, bmd);
+    } else {
+      bmd.ctx.fillStyle = '#FFF';
+      bmd.ctx.fill();
+      var brick = game.add.sprite(55 + i * 60, 55 + j * 35, bmd);
+      brick['health'] -= 0.5;
+    }
+    // Make sure the brick won't move when the ball hits it
+    brick.body.immovable = true;
+
+    return brick;
   }
 };
