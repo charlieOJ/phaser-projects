@@ -97,5 +97,10 @@ Level1.prototype = {
     console.log('returnAngle' +returnAngle);
 
     game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
+  },
+  render: function(){
+    game.debug.spriteBounds(this.paddle);
+    game.debug.spriteBounds(this.ball);
+
   }
 };
