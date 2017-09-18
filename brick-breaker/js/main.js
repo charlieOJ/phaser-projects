@@ -5,7 +5,10 @@ var spaceKey;
 var leftKey;
 var rightKey;
 var startText;
-var currentLevel,nextLevel = "Level1"
+var currentLevel,nextLevel = "Level1";
+var paddleSegmentsMax = 4;
+var paddleSegmentHeight = 4;
+var paddleSegmentAngle = 15;
 
 var game = new Phaser.Game(450, 500, Phaser.AUTO, 'gameContainer');
 

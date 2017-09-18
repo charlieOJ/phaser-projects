@@ -76,31 +76,39 @@ Level1.prototype = {
     brick.kill();
   },
   collideWithPaddle: function (ball, paddle) {
-    var returnAngle;
-    // debugger
-    var segmentHit = Math.floor((ball.x - paddle.x)/4);
+    let returnAngle = 0;
+    let segmentHit = Math.floor( (ball.x - paddle.x) / paddleSegmentHeight);
 
-    if (segmentHit >= 4) {
-      segmentHit = 4 - 1;
-      // alert("segmentHit sup à 4");
-      debugger
-
-    } else if (segmentHit <= -4) {
-      segmentHit = -(4 - 1);
+    if (segmentHit >= paddleSegmentsMax) {
+      segmentHit = paddleSegmentsMax - 1;
+    } else if (segmentHit <= -paddleSegmentsMax) {
+      segmentHit = -(paddleSegmentsMax - 1);
     }
-    console.log('segmentHit' +segmentHit);
-    returnAngle = (segmentHit * 15);
-    // if (returnAngle > 180) {
-    //   returnAngle -= 360;
-    //   alert('coucou')
-    // }
-    console.log('returnAngle' +returnAngle);
+    // console.log("-----------");
+    // console.log(segmentHit);
+    // console.log("-----------");
+    // console.log(paddle.x);
 
-    game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
-  },
-  render: function(){
-    game.debug.spriteBounds(this.paddle);
-    game.debug.spriteBounds(this.ball);
+
+    if (paddle.x < 450 * 0.5) {
+      returnAngle = segmentHit * paddleSegmentAngle;
+      // console.log(returnAngle);
+      this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
+    } else {
+      returnAngle = 180 - (segmentHit * paddleSegmentAngle);
+      if (returnAngle > 180) {
+        returnAngle -= 360;
+      }
+      // console.log(returnAngle);
+      this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
+    }
+    // console.log("-----------");
 
   }
+  // ,
+  // render: function(){
+  //   game.debug.spriteBounds(this.paddle);
+  //   game.debug.spriteBounds(this.ball);
+  //
+  // }
 };
