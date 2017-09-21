@@ -1,3 +1,4 @@
+INITIAL_VEL = 300;
 Level3 = function(game) {};
 Level3.prototype = {
   preload: function () {
@@ -28,7 +29,7 @@ Level3.prototype = {
     }
     this.ball = game.add.sprite(170, 300, 'ball');
     // Give the ball some initial speed
-    this.ball.body.velocity.x = 200;
+    this.ball.body.velocity.x = INITIAL_VEL;
     this.ball.body.velocity.y = 210;
     // Make sure the ball will bounce when hitting something
     this.ball.body.bounce.setTo(1);
@@ -49,10 +50,12 @@ Level3.prototype = {
     }
 
     // Add collisions between the paddle and the ball
-    game.physics.arcade.collide(this.paddle, this.ball);
+    // game.physics.arcade.collide(this.paddle, this.ball);
 
     // Call the 'hit' function when the ball hits a brick
     game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
+    game.physics.arcade.overlap(this.ball, this.paddle, this.collideWithPaddle, null, this);
+
 
     // Restart the game if the ball is below the paddle
     if (this.ball.y > this.paddle.y-8){
@@ -91,5 +94,25 @@ Level3.prototype = {
     brick.body.immovable = true;
 
     return brick;
+  },
+  collideWithPaddle: function (ball, paddle) {
+    let returnAngle = 0;
+    let segmentHit = Math.floor( (ball.y - paddle.y) / 4);
+
+    if (segmentHit >= 4) {
+      segmentHit = 4 - 1;
+    } else if (segmentHit <= -4) {
+      segmentHit = -(4 - 1);
+    }
+    if (paddle.x > 450 * 0.5) {
+      returnAngle = segmentHit * 15;
+      this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
+    } else {
+      returnAngle = 180 - (segmentHit * 15);
+      if (returnAngle > 180) {
+        returnAngle -= 360;
+      }
+      this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
+    }
   }
 };
