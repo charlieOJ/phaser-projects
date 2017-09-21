@@ -1,4 +1,4 @@
-INITIAL_VEL = 400;
+INITIAL_VEL = 300;
 Level1 = function(game) {};
 Level1.prototype = {
   preload: function () {
@@ -21,13 +21,13 @@ Level1.prototype = {
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
         // Create the brick at the correct position
-        // var brick = game.add.sprite(55+i*75, 55+j*35, 'brick');
+        var brick = game.add.sprite(55+i*75, 55+j*35, 'brick');
 
         // Make sure the brick won't move when the ball hits it
-        // brick.body.immovable = true;
+        brick.body.immovable = true;
 
         // Add the brick to the group
-        // this.bricks.add(brick);
+        this.bricks.add(brick);
       }
     }
     this.ball = game.add.sprite(170, 300, 'ball');
@@ -67,48 +67,32 @@ Level1.prototype = {
     }
 
     bricks_count = this.bricks.countDead();
-    // if (this.bricks.length == bricks_count){
-    //   nextLevel = "Level2";
-    //   game.state.start('Restart', true, false, nextLevel);
-    // }
+    if (this.bricks.length == bricks_count){
+      nextLevel = "Level2";
+      game.state.start('Restart', true, false, nextLevel);
+    }
   },
   hit: function(ball, brick) {
     brick.kill();
   },
   collideWithPaddle: function (ball, paddle) {
     let returnAngle = 0;
-    let segmentHit = Math.floor( (ball.x - paddle.x) / paddleSegmentHeight);
+    let segmentHit = Math.floor( (ball.y - paddle.y) / 4);
 
-    if (segmentHit >= paddleSegmentsMax) {
-      segmentHit = paddleSegmentsMax - 1;
-    } else if (segmentHit <= -paddleSegmentsMax) {
-      segmentHit = -(paddleSegmentsMax - 1);
+    if (segmentHit >= 4) {
+      segmentHit = 4 - 1;
+    } else if (segmentHit <= -4) {
+      segmentHit = -(4 - 1);
     }
-    // console.log("-----------");
-    // console.log(segmentHit);
-    // console.log("-----------");
-    // console.log(paddle.x);
-
-
-    if (paddle.x < 450 * 0.5) {
-      returnAngle = segmentHit * paddleSegmentAngle;
-      // console.log(returnAngle);
+    if (paddle.x > 450 * 0.5) {
+      returnAngle = segmentHit * 15;
       this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
     } else {
-      returnAngle = 180 - (segmentHit * paddleSegmentAngle);
+      returnAngle = 180 - (segmentHit * 15);
       if (returnAngle > 180) {
         returnAngle -= 360;
       }
-      // console.log(returnAngle);
       this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
     }
-    // console.log("-----------");
-
   }
-  // ,
-  // render: function(){
-  //   game.debug.spriteBounds(this.paddle);
-  //   game.debug.spriteBounds(this.ball);
-  //
-  // }
 };
