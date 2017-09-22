@@ -13,7 +13,6 @@ Level1.prototype = {
     game.world.enableBody = true;
     this.paddle = game.add.sprite(250, 400, 'paddle');
     this.paddle.anchor.set(0.5, 0.5);
-    // game.physics.enable(player, Phaser.Physics.ARCADE);
     // Make sure the paddle won't move when it hits the ball
     this.paddle.body.immovable = true;
     this.paddle.body.collideWorldBounds = true;
