@@ -73,18 +73,18 @@ Level1.prototype = {
   },
   collideWithPaddle: function (ball, paddle) {
     let returnAngle = 0;
-    let segmentHit = Math.floor( (ball.y - paddle.y) / 4);
+    let segmentHit = Math.floor( (ball.y - paddle.y) / paddleSegmentHeight);
 
-    if (segmentHit >= 4) {
-      segmentHit = 4 - 1;
-    } else if (segmentHit <= -4) {
-      segmentHit = -(4 - 1);
+    if (segmentHit >= paddleSegmentsMax) {
+      segmentHit = paddleSegmentsMax - 1;
+    } else if (segmentHit <= -paddleSegmentsMax) {
+      segmentHit = -(paddleSegmentsMax - 1);
     }
     if (paddle.x > 450 * 0.5) {
-      returnAngle = segmentHit * 15;
+      returnAngle = segmentHit * paddleSegmentAngle;
       this.game.physics.arcade.velocityFromAngle(returnAngle, INITIAL_VEL, this.ball.body.velocity);
     } else {
-      returnAngle = 180 - (segmentHit * 15);
+      returnAngle = 180 - (segmentHit * paddleSegmentAngle);
       if (returnAngle > 180) {
         returnAngle -= 360;
       }
