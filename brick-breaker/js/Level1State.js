@@ -35,6 +35,8 @@ Level1.prototype = {
     // Give the ball some initial speed
     this.ball.body.velocity.x = INITIAL_VEL;
     this.ball.body.velocity.y = 400;
+    this.ball.anchor.set(0.5, 0.5);
+
     // Make sure the ball will bounce when hitting something
     this.ball.body.bounce.setTo(1);
     this.ball.body.collideWorldBounds = true;
@@ -61,7 +63,7 @@ Level1.prototype = {
     game.physics.arcade.overlap(this.ball, this.paddle, this.collideWithPaddle, null, this);
 
     // Restart the game if the ball is below the paddle
-    if (this.ball.y > this.paddle.y+50){
+    if (this.ball.y > this.paddle.y-8){
       nextLevel = "Level1";
       game.state.start('Start', true, false, nextLevel);
     }

@@ -12,7 +12,9 @@ Level2.prototype = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     // Set the background color to blue
     game.world.enableBody = true;
-    this.paddle = game.add.sprite(180, 400, 'paddle');
+    this.paddle = game.add.sprite(280, 400, 'paddle');
+    this.paddle.anchor.set(0.5, 0.5);
+
     // game.physics.enable(player, Phaser.Physics.ARCADE);
     // Make sure the paddle won't move when it hits the ball
     this.paddle.body.immovable = true;
@@ -31,6 +33,8 @@ Level2.prototype = {
       }
     }
     this.ball = game.add.sprite(170, 300, 'ball');
+    this.ball.anchor.set(0.5, 0.5);
+
     // Give the ball some initial speed
     this.ball.body.velocity.x = INITIAL_VEL;
     this.ball.body.velocity.y = 210;
