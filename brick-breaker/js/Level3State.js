@@ -20,9 +20,6 @@ Level3.prototype = {
     this.bricks = game.add.group();
     for (var i = 0; i < 6; i++) {
       for (var j = 0; j < 6; j++) {
-        // Create the brick at the correct position
-        // var brick = game.add.sprite(55+i*60, 55+j*35, 'brick');
-
         // Add the brick to the group
         this.bricks.add(this.colorBrick(i,j));
       }
@@ -50,13 +47,9 @@ Level3.prototype = {
       this.paddle.body.velocity.x = 0;
     }
 
-    // Add collisions between the paddle and the ball
-    // game.physics.arcade.collide(this.paddle, this.ball);
-
     // Call the 'hit' function when the ball hits a brick
     game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
     game.physics.arcade.overlap(this.ball, this.paddle, this.collideWithPaddle, null, this);
-
 
     // Restart the game if the ball is below the paddle
     if (this.ball.y > this.paddle.y-8){

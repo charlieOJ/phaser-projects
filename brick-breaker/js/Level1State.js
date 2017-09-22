@@ -31,7 +31,6 @@ Level1.prototype = {
       }
     }
     this.ball = game.add.sprite(170, 300, 'ball');
-    // this.ball.anchor.set(0.5, 0.5)
     // Give the ball some initial speed
     this.ball.body.velocity.x = INITIAL_VEL;
     this.ball.body.velocity.y = 400;
@@ -55,10 +54,6 @@ Level1.prototype = {
       this.paddle.body.velocity.x = 0;
     }
 
-    // Add collisions between the paddle and the ball
-    // game.physics.arcade.collide(this.paddle, this.ball);
-
-    // Call the 'hit' function when the ball hits a brick
     game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
     game.physics.arcade.overlap(this.ball, this.paddle, this.collideWithPaddle, null, this);
 
